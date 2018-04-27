@@ -22,9 +22,7 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
  * @param {Array} entry 
  */
 const generateMultipleEntrys = (entry) => {
-  let entrys = Object.keys(entry);
-  // exclude vendor entry.
-  entrys = entrys.filter(entry => entry !== 'vendor' );
+  const entrys = Object.keys(entry);
   const htmlPlugin = entrys.map(name => {
     return new HtmlWebpackPlugin({
       filename: name + '.html',
@@ -41,7 +39,7 @@ const generateMultipleEntrys = (entry) => {
 }
 
 /**
- * Webpack configuration for web.
+ * Webpack configuration for browser.
  */
 const productionConfig = webpackMerge(commonConfig[0], {
   /**
@@ -199,6 +197,13 @@ const weexConfig = webpackMerge(commonConfig[1], {
       }
     })
   ]
+})
+
+// build source to weex_bundle with watch mode.
+webpack(weexConfig, (err, stats) => {
+  if (err) {
+    console.err('COMPILE ERROR:', err.stack)
+  }
 })
 
 module.exports = productionConfig
